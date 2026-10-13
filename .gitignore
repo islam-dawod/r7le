@@ -11,3 +11,6 @@ venv/
 
 # Local server / tmp
 .cache/
+
+# Raw source photos (not shipped)
+.src-photos/

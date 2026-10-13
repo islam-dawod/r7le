@@ -95,14 +95,11 @@ def icon(name):
 
 def logo(rp, mono=False):
     cls = "logo logo--mono" if mono else "logo"
-    return (f'<a class="{cls}" href="{rp}index.html" aria-label="رحلة R7LE — الصفحة الرئيسية">'
-            f'<span class="logo__mark" aria-hidden="true">'
-            f'<svg viewBox="0 0 40 40" fill="none" aria-hidden="true">'
-            f'<path d="M6 30c8 2 20 2 28-10" stroke="currentColor" stroke-width="2.4" '
-            f'stroke-linecap="round"/>'
-            f'<path d="M20 6l3.4 6.9 7.6 1.1-5.5 5.4 1.3 7.6L20 23.4 13.2 27l1.3-7.6L9 14l7.6-1.1L20 6z" '
-            f'fill="currentColor"/></svg></span>'
-            f'<span class="logo__txt"><b>رحلة</b><i>R7LE</i></span></a>')
+    return (f'<a class="{cls}" href="{rp}index.html" aria-label="رحلة re7le — الصفحة الرئيسية">'
+            f'<span class="logo__mark">'
+            f'<img src="{rp}assets/img/logo-mark.png" alt="" width="44" height="44" loading="eager" decoding="async">'
+            f'</span>'
+            f'<span class="logo__txt"><b>رحلة</b><i>re7le</i></span></a>')
 
 
 def head(title, desc, path, rp, extra=""):
@@ -122,7 +119,10 @@ def head(title, desc, path, rp, extra=""):
 <meta property="og:title" content="{title}">
 <meta property="og:description" content="{desc}">
 <meta property="og:url" content="{canonical}">
-<link rel="icon" href="{rp}assets/img/favicon.svg" type="image/svg+xml">
+<meta property="og:image" content="{SITE['base_url']}/assets/img/logo-full.png">
+<link rel="icon" href="{rp}assets/img/favicon-32.png" sizes="32x32" type="image/png">
+<link rel="icon" href="{rp}assets/img/favicon-64.png" sizes="64x64" type="image/png">
+<link rel="apple-touch-icon" href="{rp}assets/img/favicon-180.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800&display=swap" rel="stylesheet">
@@ -247,16 +247,15 @@ def hero_block(rp):
         <li>{icon('check')} بدون وعود بقبول مضمون</li>
       </ul>
     </div>
-    <div class="hero__card" aria-hidden="true">
-      <div class="ticket">
-        <div class="ticket__head"><span>رحلة R7LE</span>{icon('globe')}</div>
-        <div class="ticket__route">
+    <div class="hero__media">
+      <img src="{rp}assets/img/photos/hero.jpg" width="1100" height="1000"
+           alt="مسافر ينظر من نافذة الطائرة وجواز سفر على الطاولة عند الغروب" fetchpriority="high">
+      <div class="hero__ticket" aria-hidden="true">
+        <span class="hero__ticket-head">رحلة re7le {icon('globe')}</span>
+        <div class="hero__ticket-route">
           <div><b>العراق</b><small>بغداد / المحافظات</small></div>
-          <span class="ticket__plane">{icon('arrow')}</span>
+          <span class="hero__plane">{icon('arrow')}</span>
           <div><b>الوجهة</b><small>USA · CA · AU</small></div>
-        </div>
-        <div class="ticket__steps">
-          <span>اختر الخدمة</span><span>راجع السعر</span><span>تابع التنفيذ</span>
         </div>
       </div>
     </div>
@@ -266,23 +265,29 @@ def hero_block(rp):
 
 def destinations_block(rp):
     cards = [
-        ("usa", "أمريكا — الولايات المتحدة", "flag",
+        ("usa", "أمريكا — الولايات المتحدة", "تمثال الحرية في نيويورك",
          "تخطط لزيارة أمريكا؟ تعرّف على خدماتنا الإدارية المتعلقة بتجهيز مستندات "
          "تأشيرة الزيارة B1/B2 وخدمات المساعدة في بيانات النماذج المتاحة."),
-        ("canada", "كندا", "flag",
+        ("canada", "كندا", "أفق مدينة تورنتو الكندية",
          "تفكر تزور الأهل أو تسافر للسياحة؟ نستعرض متطلبات الزيارة وخدمات تجهيز "
          "المستندات المتاحة، مع مقالات معلوماتية عن البرامج المختلفة."),
-        ("australia", "أستراليا", "flag",
+        ("australia", "أستراليا", "رسم تعبيري لميناء سيدني — الجسر ودار الأوبرا",
          "اكتشف متطلبات الزيارة إلى أستراليا وخيارات الدعم الإداري الخاصة بمستندات "
          "تأشيرة الزيارة Subclass 600 ذات الصلة بالعراقيين."),
     ]
     html = ""
-    for slug, title, ic, text in cards:
+    for slug, title, alt, text in cards:
         html += f"""
     <article class="dest-card">
-      <div class="dest-card__top">{icon(ic)}<h3>{title}</h3></div>
-      <p>{text}</p>
-      <a class="link-arrow" href="{rp}{slug}/index.html">تفاصيل الوجهة والخدمات {icon('arrow')}</a>
+      <a class="dest-card__img" href="{rp}{slug}/index.html" tabindex="-1" aria-hidden="true">
+        <img src="{rp}assets/img/photos/{slug}.jpg" alt="{alt}" width="820" height="512" loading="lazy">
+        <span class="dest-card__tag">{icon('pin')} {title}</span>
+      </a>
+      <div class="dest-card__body">
+        <h3>{title}</h3>
+        <p>{text}</p>
+        <a class="link-arrow" href="{rp}{slug}/index.html">تفاصيل الوجهة والخدمات {icon('arrow')}</a>
+      </div>
     </article>"""
     return f"""
 <section class="section" id="destinations">
@@ -491,7 +496,13 @@ def destination_body(rp, slug, title, kicker, intro, services_filter, sections):
       <h2>{h}</h2>
       <ul class="ticklist">{li}</ul>
     </div>"""
-    return (crumb + page_hero(title, intro, kicker)
+    alts = {"usa": "تمثال الحرية في نيويورك", "canada": "أفق مدينة تورنتو الكندية",
+            "australia": "رسم تعبيري لميناء سيدني — الجسر ودار الأوبرا"}
+    banner = f"""
+<figure class="banner">
+  <img src="{rp}assets/img/photos/{slug}.jpg" alt="{alts.get(slug, title)}" width="820" height="512" loading="eager">
+</figure>"""
+    return (crumb + page_hero(title, intro, kicker) + banner
             + f"""
 <section class="section">
   <div class="wrap">
@@ -626,6 +637,10 @@ def build_howitworks():
         "كيف نعمل؟", "الخطوات الفعلية من إرسال الطلب حتى تسليم ملف الخدمة، مع التعامل الآمن "
         "مع حالات التأخّر أو الفشل.", "رحلة العميل · Flow")
             + f"""
+<figure class="banner">
+  <img src="{rp}assets/img/photos/appointment.jpg" width="900" height="600" loading="eager"
+       alt="حجز موعد وتجهيز الطلب عبر الحاسوب">
+</figure>
 <section class="section">
   <div class="wrap"><ol class="steps steps--lg">{steps}</ol></div>
 </section>
@@ -701,25 +716,28 @@ def build_blog():
     crumb = breadcrumb([("/", "الرئيسية"), ("/blog/", "المدونة")], rp)
     posts = [
         ("تأشيرة أمريكا للعراقيين: الخطوات الرسمية والوثائق",
-         "الخطوات الرسمية والوثائق، ومتى تحتاج للخدمة الإدارية.", "أمريكا"),
+         "الخطوات الرسمية والوثائق، ومتى تحتاج للخدمة الإدارية.", "أمريكا", "usa"),
         ("زيارة كندا للعراقيين: الفرق بين المتطلبات الحكومية ورسوم الخدمة",
-         "توضيح الفرق بين المتطلبات الحكومية الرسمية ورسوم الخدمة الخاصة.", "كندا"),
+         "توضيح الفرق بين المتطلبات الحكومية الرسمية ورسوم الخدمة الخاصة.", "كندا", "canada"),
         ("أستراليا Subclass 600: المستندات والخطوات الرسمية",
-         "الوثائق والخطوات الرسمية ذات الصلة بالعراقيين.", "أستراليا"),
+         "الوثائق والخطوات الرسمية ذات الصلة بالعراقيين.", "أستراليا", "australia"),
         ("هل يستطيع حامل جواز عراقي التقديم من دولة إقامته؟",
-         "معلومات بحسب الإجراء المعتمد ومصدره الرسمي.", "معلومات"),
+         "معلومات بحسب الإجراء المعتمد ومصدره الرسمي.", "معلومات", "hero"),
         ("كيف تجهّز أوراق العائلة أو القاصرين للسفر؟",
-         "مع رابط التعليمات الحكومية الحديثة.", "معلومات"),
+         "مع رابط التعليمات الحكومية الحديثة.", "معلومات", "appointment"),
     ]
     cards = ""
-    for t, d, cat in posts:
+    for t, d, cat, img in posts:
         cards += f"""
       <article class="post">
-        <span class="chip chip--sm">{cat}</span>
-        <h3>{t}</h3>
-        <p>{d}</p>
-        <p class="post__meta">{icon('clock')} آخر مراجعة: {TODAY} · المصادر رسمية</p>
-        <span class="link-arrow link-arrow--muted">قريبًا {icon('arrow')}</span>
+        <div class="post__img"><img src="{rp}assets/img/photos/{img}.jpg" alt="" width="820" height="512" loading="lazy">
+          <span class="chip chip--sm">{cat}</span></div>
+        <div class="post__body">
+          <h3>{t}</h3>
+          <p>{d}</p>
+          <p class="post__meta">{icon('clock')} آخر مراجعة: {TODAY} · المصادر رسمية</p>
+          <span class="link-arrow link-arrow--muted">قريبًا {icon('arrow')}</span>
+        </div>
       </article>"""
     body = (crumb + page_hero(
         "المدونة", "مقالات معلوماتية مخصّصة للعراقيين — كل مقال يتضمّن تاريخ آخر مراجعة "
@@ -812,9 +830,11 @@ def build_aboutus():
     ]
     tr = ''.join(f"<tr><th>{k}</th><td>{v}</td></tr>" for k, v in rows)
     body = (crumb + page_hero(
-        "من نحن", "رحلة R7LE مقدّم خدمات خاص ومستقل، يقدّم مساعدة إدارية وتجهيزًا وتنظيمًا "
+        "من نحن", "رحلة re7le مقدّم خدمات خاص ومستقل، يقدّم مساعدة إدارية وتجهيزًا وتنظيمًا "
         "للمستندات — دون أي صفة حكومية.", "About")
             + f"""
+<figure class="banner"><img src="{rp}assets/img/photos/hero.jpg" width="1100" height="1000"
+   alt="جواز سفر ونافذة طائرة — رمز لرحلة السفر" loading="eager"></figure>
 <section class="section">
   <div class="wrap narrow">
     <div class="prose">
@@ -1072,13 +1092,14 @@ ul{margin:0;padding:0;list-style:none}
 .site-head__row{display:flex;align-items:center;gap:1rem;min-height:68px}
 .logo{display:inline-flex;align-items:center;gap:.55rem;font-weight:800;color:var(--ink)}
 .logo:hover{text-decoration:none}
-.logo__mark{width:38px;height:38px;color:var(--primary);display:inline-flex}
-.logo__mark svg{width:100%;height:100%}
+.logo__mark{width:46px;height:46px;flex:none;display:inline-flex;border-radius:11px;
+  overflow:hidden;background:#fff}
+.logo__mark img{width:100%;height:100%;object-fit:contain;display:block}
 .logo__txt{display:flex;flex-direction:column;line-height:1}
 .logo__txt b{font-size:1.25rem}
-.logo__txt i{font-style:normal;font-size:.72rem;letter-spacing:.18em;color:var(--accent-d);font-weight:700}
+.logo__txt i{font-style:normal;font-size:.74rem;letter-spacing:.16em;color:var(--accent-d);font-weight:700;text-transform:lowercase}
 .logo--mono{color:#fff}
-.logo--mono .logo__mark{color:#fff}
+.logo--mono .logo__mark{box-shadow:0 0 0 1px rgba(255,255,255,.18)}
 .logo--mono .logo__txt i{color:var(--accent)}
 .nav{margin-inline-start:auto}
 .nav__list{display:flex;gap:.3rem}
@@ -1118,24 +1139,25 @@ ul{margin:0;padding:0;list-style:none}
 .hero__badges{display:flex;flex-wrap:wrap;gap:.5rem 1.3rem;margin-top:.6rem}
 .hero__badges li{display:flex;gap:.4rem;align-items:center;color:var(--ink-2);font-weight:600;font-size:.95rem}
 .hero__badges .ic{color:var(--ok)}
-.hero__card{display:flex;justify-content:center}
-.ticket{width:100%;max-width:380px;background:#fff;border:1px solid var(--line);
-  border-radius:20px;box-shadow:var(--shadow);padding:1.4rem;position:relative}
-.ticket::before,.ticket::after{content:"";position:absolute;width:26px;height:26px;
-  background:var(--bg);border-radius:50%;top:58%}
-.ticket::before{right:-13px}.ticket::after{left:-13px}
-.ticket__head{display:flex;justify-content:space-between;align-items:center;
-  font-weight:800;color:var(--primary-d)}
-.ticket__head .ic{color:var(--accent-d)}
-.ticket__route{display:flex;justify-content:space-between;align-items:center;
-  margin:1.3rem 0;padding-bottom:1.3rem;border-bottom:2px dashed var(--line)}
-.ticket__route b{display:block;font-size:1.15rem}
-.ticket__route small{color:var(--muted)}
-.ticket__plane{color:var(--primary);transform:scaleX(-1)}
-.ticket__plane .ic{width:1.8em;height:1.8em}
-.ticket__steps{display:flex;justify-content:space-between;gap:.4rem}
-.ticket__steps span{flex:1;text-align:center;background:var(--primary-l);color:var(--primary-d);
-  font-size:.75rem;font-weight:700;padding:.5rem .2rem;border-radius:8px}
+.hero__media{position:relative}
+.hero__media>img{width:100%;height:auto;aspect-ratio:11/10;object-fit:cover;
+  border-radius:20px;box-shadow:var(--shadow)}
+.hero__ticket{position:absolute;inset-inline-start:-14px;bottom:24px;background:rgba(255,255,255,.96);
+  backdrop-filter:blur(6px);border:1px solid var(--line);border-radius:14px;box-shadow:var(--shadow);
+  padding:.9rem 1.1rem;min-width:240px}
+.hero__ticket-head{display:flex;justify-content:space-between;align-items:center;gap:.6rem;
+  font-weight:800;color:var(--primary-d);margin-bottom:.6rem}
+.hero__ticket-head .ic{color:var(--accent-d)}
+.hero__ticket-route{display:flex;justify-content:space-between;align-items:center;gap:.6rem}
+.hero__ticket-route b{display:block;font-size:1rem}
+.hero__ticket-route small{color:var(--muted);font-size:.78rem}
+.hero__plane{color:var(--primary);transform:scaleX(-1)}
+.hero__plane .ic{width:1.5em;height:1.5em}
+
+/* banner figure */
+.banner{margin:0;padding:1.6rem 16px 0}
+.banner img{display:block;width:100%;max-width:var(--wrap);margin-inline:auto;height:auto;
+  aspect-ratio:16/7;object-fit:cover;border-radius:var(--r);box-shadow:var(--shadow-sm)}
 
 /* sections */
 .section{padding-block:clamp(2.5rem,5vw,4.2rem)}
@@ -1149,11 +1171,17 @@ ul{margin:0;padding:0;list-style:none}
 
 /* destination cards */
 .dest-card{background:var(--card);border:1px solid var(--line);border-radius:var(--r);
-  padding:1.6rem;box-shadow:var(--shadow-sm);transition:.2s}
+  overflow:hidden;box-shadow:var(--shadow-sm);transition:.2s;display:flex;flex-direction:column}
 .dest-card:hover{box-shadow:var(--shadow);transform:translateY(-3px);border-color:#cfe0e2}
-.dest-card__top{display:flex;align-items:center;gap:.6rem;margin-bottom:.6rem}
-.dest-card__top .ic{color:var(--primary);width:1.6em;height:1.6em}
-.dest-card__top h3{margin:0}
+.dest-card__img{position:relative;display:block;aspect-ratio:820/420;overflow:hidden}
+.dest-card__img img{width:100%;height:100%;object-fit:cover;transition:transform .4s}
+.dest-card:hover .dest-card__img img{transform:scale(1.05)}
+.dest-card__tag{position:absolute;inset-inline-start:12px;bottom:12px;display:inline-flex;
+  align-items:center;gap:.35rem;background:rgba(7,35,42,.82);color:#fff;font-weight:700;
+  font-size:.85rem;padding:.35rem .75rem;border-radius:999px;backdrop-filter:blur(4px)}
+.dest-card__tag .ic{color:var(--accent);width:1.1em;height:1.1em}
+.dest-card__body{padding:1.4rem 1.5rem 1.6rem}
+.dest-card__body h3{margin:0 0 .5rem}
 .link-arrow{display:inline-flex;align-items:center;gap:.35rem;font-weight:700;color:var(--primary-d)}
 .link-arrow .ic{width:1.1em;height:1.1em;transform:scaleX(-1)}
 .link-arrow--muted{color:var(--muted);cursor:default}
@@ -1246,9 +1274,14 @@ ul{margin:0;padding:0;list-style:none}
 .spec tr:last-child th,.spec tr:last-child td{border-bottom:0}
 
 /* posts / features */
-.post{background:#fff;border:1px solid var(--line);border-radius:var(--r);padding:1.4rem;
-  box-shadow:var(--shadow-sm);display:flex;flex-direction:column;gap:.5rem}
-.post h3{margin:.2rem 0}
+.post{background:#fff;border:1px solid var(--line);border-radius:var(--r);overflow:hidden;
+  box-shadow:var(--shadow-sm);display:flex;flex-direction:column}
+.post__img{position:relative;aspect-ratio:820/460;overflow:hidden}
+.post__img img{width:100%;height:100%;object-fit:cover}
+.post__img .chip--sm{position:absolute;inset-inline-start:12px;top:12px;background:rgba(7,35,42,.82);
+  color:#fff;backdrop-filter:blur(4px)}
+.post__body{padding:1.3rem 1.4rem;display:flex;flex-direction:column;gap:.5rem}
+.post h3{margin:.2rem 0;font-size:1.1rem}
 .post__meta{font-size:.8rem;color:var(--muted);display:flex;gap:.4rem;align-items:center;margin:0}
 .feature{background:#fff;border:1px solid var(--line);border-radius:var(--r);padding:1.5rem;
   box-shadow:var(--shadow-sm)}
@@ -1315,7 +1348,8 @@ ul{margin:0;padding:0;list-style:none}
   .nav,.site-head__cta{display:none}
   .nav-toggle{display:inline-flex}
   .hero__inner{grid-template-columns:1fr;gap:1.8rem}
-  .hero__card{order:-1}
+  .hero__media{order:-1;max-width:520px}
+  .banner img{aspect-ratio:16/9}
   .grid--3{grid-template-columns:repeat(2,1fr)}
   .steps,.steps--lg{grid-template-columns:repeat(2,1fr)}
   .site-foot__grid{grid-template-columns:1fr 1fr}
