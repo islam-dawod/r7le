@@ -248,8 +248,8 @@ def hero_block(rp):
       </ul>
     </div>
     <div class="hero__media">
-      <img src="{rp}assets/img/photos/hero.jpg" width="1100" height="1000"
-           alt="مسافر ينظر من نافذة الطائرة وجواز سفر على الطاولة عند الغروب" fetchpriority="high">
+      <img src="{rp}assets/img/photos/hero.jpg" width="1500" height="1000"
+           alt="ميناء سيدني — دار الأوبرا وجسر الميناء في أستراليا" fetchpriority="high">
       <div class="hero__ticket" aria-hidden="true">
         <span class="hero__ticket-head">رحلة re7le {icon('globe')}</span>
         <div class="hero__ticket-route">
@@ -722,7 +722,7 @@ def build_blog():
         ("أستراليا Subclass 600: المستندات والخطوات الرسمية",
          "الوثائق والخطوات الرسمية ذات الصلة بالعراقيين.", "أستراليا", "australia"),
         ("هل يستطيع حامل جواز عراقي التقديم من دولة إقامته؟",
-         "معلومات بحسب الإجراء المعتمد ومصدره الرسمي.", "معلومات", "hero"),
+         "معلومات بحسب الإجراء المعتمد ومصدره الرسمي.", "معلومات", "travel"),
         ("كيف تجهّز أوراق العائلة أو القاصرين للسفر؟",
          "مع رابط التعليمات الحكومية الحديثة.", "معلومات", "appointment"),
     ]
@@ -833,7 +833,7 @@ def build_aboutus():
         "من نحن", "رحلة re7le مقدّم خدمات خاص ومستقل، يقدّم مساعدة إدارية وتجهيزًا وتنظيمًا "
         "للمستندات — دون أي صفة حكومية.", "About")
             + f"""
-<figure class="banner"><img src="{rp}assets/img/photos/hero.jpg" width="1100" height="1000"
+<figure class="banner"><img src="{rp}assets/img/photos/travel.jpg" width="1100" height="1000"
    alt="جواز سفر ونافذة طائرة — رمز لرحلة السفر" loading="eager"></figure>
 <section class="section">
   <div class="wrap narrow">
@@ -1140,7 +1140,7 @@ ul{margin:0;padding:0;list-style:none}
 .hero__badges li{display:flex;gap:.4rem;align-items:center;color:var(--ink-2);font-weight:600;font-size:.95rem}
 .hero__badges .ic{color:var(--ok)}
 .hero__media{position:relative}
-.hero__media>img{width:100%;height:auto;aspect-ratio:11/10;object-fit:cover;
+.hero__media>img{width:100%;height:auto;aspect-ratio:3/2;object-fit:cover;
   border-radius:20px;box-shadow:var(--shadow)}
 .hero__ticket{position:absolute;inset-inline-start:-14px;bottom:24px;background:rgba(255,255,255,.96);
   backdrop-filter:blur(6px);border:1px solid var(--line);border-radius:14px;box-shadow:var(--shadow);
