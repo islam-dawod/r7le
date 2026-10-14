@@ -16,6 +16,14 @@
       });
     });
   }
+  var head = document.querySelector(".site-head");
+  if (head) {
+    var onScroll = function () {
+      head.classList.toggle("is-scrolled", window.scrollY > 8);
+    };
+    window.addEventListener("scroll", onScroll, { passive: true });
+    onScroll();
+  }
   document.querySelectorAll(".acc__btn").forEach(function (btn) {
     btn.addEventListener("click", function () {
       var open = btn.getAttribute("aria-expanded") === "true";

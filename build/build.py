@@ -132,13 +132,26 @@ def head(title, desc, path, rp, extra=""):
 <a class="skip" href="#main">تخطَّ إلى المحتوى</a>"""
 
 
+def topbar(rp):
+    return f"""<div class="topbar">
+  <div class="wrap topbar__row">
+    <div class="topbar__contacts">
+      <a href="{SITE['whatsapp_link']}" rel="nofollow">{icon('wa')}<span>{SITE['whatsapp']}</span></a>
+      <a href="mailto:{SITE['email']}">{icon('mail')}<span dir="ltr">{SITE['email']}</span></a>
+      <span class="topbar__hours">{icon('clock')} {SITE['hours']}</span>
+    </div>
+    <div class="topbar__note">{icon('shield')} خدمات خاصة مستقلة — لسنا جهة حكومية</div>
+  </div>
+</div>"""
+
+
 def header(path, rp):
     links = ""
     for route, label in NAV:
         active = ' aria-current="page"' if route == path else ""
         href = rp + "index.html" if route == "/" else rp + route.strip("/") + "/index.html"
         links += f'<li><a href="{href}"{active}>{label}</a></li>'
-    return f"""<header class="site-head">
+    return topbar(rp) + f"""<header class="site-head">
   <div class="wrap site-head__row">
     {logo(rp)}
     <nav class="nav" aria-label="التنقل الرئيسي">
@@ -184,7 +197,14 @@ def footer(rp):
                      ("/client/", "حساب العميل"), ("/contact/", "تواصل معنا")])
     legal = ''.join(
         f'<li><a href="{rp}{r.strip("/")}/index.html">{l}</a></li>' for r, l in FOOTER_LEGAL)
+    ribbon = ''.join(
+        f'<li>{icon(i)}<span>{t}</span></li>' for i, t in [
+            ("shield", "اتصال مشفّر HTTPS/TLS"),
+            ("lock", "خصوصية وحماية بيانات"),
+            ("card", "رسوم حكومية منفصلة ومعلنة"),
+            ("scale", "إفصاح واضح وعدم ارتباط حكومي")])
     return f"""<footer class="site-foot">
+  <div class="site-foot__ribbon"><div class="wrap"><ul>{ribbon}</ul></div></div>
   <div class="wrap site-foot__grid">
     <div class="site-foot__brand">
       {logo(rp, mono=True)}
@@ -263,6 +283,49 @@ def hero_block(rp):
 </section>"""
 
 
+def shead(kicker, title, sub=""):
+    s = f'<p>{sub}</p>' if sub else ""
+    return (f'<div class="section__head"><span class="kicker">{kicker}</span>'
+            f'<h2>{title}</h2>{s}</div>')
+
+
+def trust_strip():
+    items = [("shield", "لسنا جهة حكومية", "مقدّم خدمة خاص ومستقل"),
+             ("card", "أسعار معلنة", "رسوم الشركة منفصلة عن الحكومية"),
+             ("lock", "دفع وبيانات آمنة", "تشفير HTTPS/TLS وخصوصية"),
+             ("chat", "دعم بالعربية", "تواصل ويانا بكل وضوح")]
+    li = ''.join(
+        f'<li>{icon(i)}<div><b>{t}</b><span>{d}</span></div></li>' for i, t, d in items)
+    return f"""
+<section class="trust-strip" aria-label="ضمانات الخدمة">
+  <div class="wrap"><ul>{li}</ul></div>
+</section>"""
+
+
+def whyus_block():
+    cards = [
+        ("scale", "شفافية حقيقية",
+         "نوضّح حدود الخدمة، والرسوم الحكومية المنفصلة، وسياسة الاسترداد قبل أي دفع."),
+        ("doc", "مخرجات محدّدة",
+         "كل خدمة تذكر بدقة ما ستستلمه (Deliverables) وما لا تشمله — بلا وعود مبهمة."),
+        ("shield", "أمان وخصوصية",
+         "تشفير للملفات الحساسة، صلاحيات أقل امتياز، وجمع البيانات على مراحل."),
+        ("globe", "مخصّص للعراقيين",
+         "محتوى ولهجة وخطوات موجّهة للسوق العراقي، ودعم كامل باللغة العربية."),
+    ]
+    c = ''.join(
+        f'<article class="value"><span class="value__ic">{icon(i)}</span>'
+        f'<h3>{t}</h3><p>{d}</p></article>' for i, t, d in cards)
+    return f"""
+<section class="section">
+  <div class="wrap">
+    {shead("لماذا رحلة re7le", "سبب يجعل اختيارك مطمئنًا",
+           "نبني الثقة بالوضوح لا بالوعود — خدمات حقيقية بحدود معلومة.")}
+    <div class="grid grid--4 values">{c}</div>
+  </div>
+</section>"""
+
+
 def destinations_block(rp):
     cards = [
         ("usa", "أمريكا — الولايات المتحدة", "تمثال الحرية في نيويورك",
@@ -292,10 +355,8 @@ def destinations_block(rp):
     return f"""
 <section class="section" id="destinations">
   <div class="wrap">
-    <div class="section__head">
-      <h2>اختر وجهتك</h2>
-      <p>ثلاث صفحات مستقلة لكل وجهة، تشرح الخدمات المتاحة وحدودها بوضوح قبل أي طلب.</p>
-    </div>
+    {shead("وجهاتنا", "اختر وجهتك",
+           "ثلاث صفحات مستقلة لكل وجهة، تشرح الخدمات المتاحة وحدودها بوضوح قبل أي طلب.")}
     <div class="grid grid--3">{html}
     </div>
   </div>
@@ -319,10 +380,8 @@ def howitworks_block():
     return f"""
 <section class="section section--alt">
   <div class="wrap">
-    <div class="section__head">
-      <h2>كيف نعمل؟</h2>
-      <p>تجربة بسيطة للعميل العراقي: من اختيار الوجهة حتى تسليم ملف الخدمة.</p>
-    </div>
+    {shead("آلية العمل", "كيف نعمل؟",
+           "تجربة بسيطة للعميل العراقي: من اختيار الوجهة حتى تسليم ملف الخدمة.")}
     <ol class="steps">{items}
     </ol>
   </div>
@@ -339,10 +398,8 @@ def promises_block():
     return f"""
 <section class="section">
   <div class="wrap">
-    <div class="section__head">
-      <h2>نلتزم بالوضوح</h2>
-      <p>فصل واضح بين المساعدة الإدارية والمعلومات، وبين أي وعود لا تسيطر عليها الشركة.</p>
-    </div>
+    {shead("التزامنا", "نلتزم بالوضوح",
+           "فصل واضح بين المساعدة الإدارية والمعلومات، وبين أي وعود لا تسيطر عليها الشركة.")}
     <div class="grid grid--2">
       <div class="panel panel--ok">
         <h3>{icon('check')} ما نقدّمه</h3>
@@ -477,8 +534,8 @@ def service_card(s, rp, detailed=False):
 
 def build_home():
     rp = rel_prefix("/")
-    body = (hero_block(rp) + destinations_block(rp) + howitworks_block()
-            + promises_block() + cta_block(rp))
+    body = (hero_block(rp) + trust_strip() + destinations_block(rp)
+            + whyus_block() + howitworks_block() + promises_block() + cta_block(rp))
     page("/", "رحلة R7LE | خدمات تجهيز مستندات السفر لأمريكا وكندا وأستراليا",
          "منصّة عراقية مستقلة لخدمات المساعدة الإدارية وتجهيز مستندات طلب تأشيرة الزيارة "
          "لأمريكا وكندا وأستراليا، بأسعار معلنة وشروط واضحة ودعم بالعربية.", body)
@@ -1343,6 +1400,68 @@ ul{margin:0;padding:0;list-style:none}
   font-size:.82rem;color:#88a4a8}
 .site-foot__bottom p{margin:0}
 
+/* ===== premium polish ===== */
+/* top utility bar */
+.topbar{background:var(--ink);color:#c7d6da;font-size:.82rem}
+.topbar__row{display:flex;align-items:center;justify-content:space-between;gap:1rem;
+  min-height:40px;flex-wrap:wrap}
+.topbar__contacts{display:flex;align-items:center;gap:1.2rem;flex-wrap:wrap}
+.topbar__contacts a,.topbar__hours{display:inline-flex;align-items:center;gap:.4rem;color:#c7d6da}
+.topbar__contacts a:hover{color:#fff;text-decoration:none}
+.topbar__contacts .ic{color:var(--accent);width:1.05em;height:1.05em}
+.topbar__note{display:inline-flex;align-items:center;gap:.4rem;color:#9fbabd}
+.topbar__note .ic{color:var(--accent);width:1.05em;height:1.05em}
+
+/* refined heading kicker */
+.kicker{display:inline-block;color:var(--accent-d);font-weight:800;font-size:.8rem;
+  letter-spacing:.14em;text-transform:uppercase;margin-bottom:.6rem}
+.section__head .kicker::before{content:"";display:inline-block;width:22px;height:2px;
+  background:var(--accent);vertical-align:middle;margin-inline-end:.5rem}
+.section__head .kicker::after{content:"";display:inline-block;width:22px;height:2px;
+  background:var(--accent);vertical-align:middle;margin-inline-start:.5rem}
+
+/* refined header + primary button */
+.site-head.is-scrolled{box-shadow:0 6px 24px rgba(11,31,42,.08)}
+.btn--primary{background:linear-gradient(180deg,var(--primary),var(--primary-d));
+  box-shadow:0 6px 16px rgba(14,110,125,.28)}
+.btn--primary:hover{box-shadow:0 10px 22px rgba(14,110,125,.34)}
+.hero{position:relative}
+.hero::before{content:"";position:absolute;inset:0;pointer-events:none;
+  background-image:radial-gradient(rgba(14,110,125,.07) 1px,transparent 1px);
+  background-size:22px 22px;mask-image:linear-gradient(180deg,#000,transparent 70%)}
+.hero__inner{position:relative}
+
+/* trust strip under hero */
+.trust-strip{background:#fff;border-bottom:1px solid var(--line)}
+.trust-strip ul{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--line)}
+.trust-strip li{display:flex;gap:.7rem;align-items:center;background:#fff;padding:1.1rem 1.2rem}
+.trust-strip .ic{color:var(--primary);width:1.7em;height:1.7em;flex:none}
+.trust-strip b{display:block;font-size:.98rem}
+.trust-strip span{color:var(--muted);font-size:.82rem}
+
+/* value cards (why us) */
+.grid--4{grid-template-columns:repeat(4,1fr)}
+.value{background:#fff;border:1px solid var(--line);border-radius:var(--r);padding:1.6rem;
+  box-shadow:var(--shadow-sm);transition:.2s;position:relative;overflow:hidden}
+.value::before{content:"";position:absolute;inset-inline-start:0;top:0;width:100%;height:4px;
+  background:linear-gradient(90deg,var(--primary),var(--accent));opacity:0;transition:.2s}
+.value:hover{transform:translateY(-3px);box-shadow:var(--shadow);border-color:#cfe0e2}
+.value:hover::before{opacity:1}
+.value__ic{display:inline-flex;align-items:center;justify-content:center;width:52px;height:52px;
+  border-radius:14px;background:var(--primary-l);color:var(--primary-d);margin-bottom:1rem}
+.value__ic .ic{width:1.6em;height:1.6em}
+.value h3{font-size:1.1rem}
+.value p{color:var(--muted);font-size:.95rem;margin:0}
+
+/* footer trust ribbon */
+.site-foot{padding-top:0}
+.site-foot__ribbon{background:#061c22;border-bottom:1px solid rgba(255,255,255,.08)}
+.site-foot__ribbon ul{display:grid;grid-template-columns:repeat(4,1fr);gap:1rem;padding-block:1.2rem}
+.site-foot__ribbon li{display:flex;gap:.55rem;align-items:center;color:#aec6ca;font-size:.86rem;
+  font-weight:600}
+.site-foot__ribbon .ic{color:var(--accent);width:1.3em;height:1.3em;flex:none}
+.site-foot__grid{padding-top:2.6rem}
+
 /* responsive */
 @media(max-width:960px){
   .nav,.site-head__cta{display:none}
@@ -1350,16 +1469,21 @@ ul{margin:0;padding:0;list-style:none}
   .hero__inner{grid-template-columns:1fr;gap:1.8rem}
   .hero__media{order:-1;max-width:520px}
   .banner img{aspect-ratio:16/9}
-  .grid--3{grid-template-columns:repeat(2,1fr)}
+  .grid--3,.grid--4{grid-template-columns:repeat(2,1fr)}
   .steps,.steps--lg{grid-template-columns:repeat(2,1fr)}
-  .site-foot__grid{grid-template-columns:1fr 1fr}
+  .site-foot__grid,.site-foot__ribbon ul{grid-template-columns:1fr 1fr}
+  .trust-strip ul{grid-template-columns:repeat(2,1fr)}
+  .topbar__note{display:none}
 }
 @media(max-width:640px){
   body{font-size:16px}
-  .grid--2,.grid--3,.steps,.steps--lg,.svc__cols,.form__row{grid-template-columns:1fr}
+  .grid--2,.grid--3,.grid--4,.steps,.steps--lg,.svc__cols,.form__row{grid-template-columns:1fr}
   .cta__inner{flex-direction:column;align-items:flex-start}
-  .site-foot__grid{grid-template-columns:1fr}
+  .site-foot__grid,.site-foot__ribbon ul{grid-template-columns:1fr}
+  .trust-strip ul{grid-template-columns:1fr 1fr}
   .site-foot__bottom{flex-direction:column;gap:.3rem}
+  .topbar__hours{display:none}
+  .topbar__row{justify-content:center}
 }
 @media(prefers-reduced-motion:reduce){*{scroll-behavior:auto;transition:none!important}}
 """
@@ -1381,6 +1505,14 @@ JS = r"""// R7LE — interactions: mobile nav + FAQ accordion
         mnav.hidden = true;
       });
     });
+  }
+  var head = document.querySelector(".site-head");
+  if (head) {
+    var onScroll = function () {
+      head.classList.toggle("is-scrolled", window.scrollY > 8);
+    };
+    window.addEventListener("scroll", onScroll, { passive: true });
+    onScroll();
   }
   document.querySelectorAll(".acc__btn").forEach(function (btn) {
     btn.addEventListener("click", function () {
