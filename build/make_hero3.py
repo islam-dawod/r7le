@@ -22,18 +22,30 @@ def cover(img, w, h):
     return img.crop((l, t, l + w, t + h))
 
 
-# blurred, slightly darkened background that fills the whole canvas
-bg = cover(src, CW, CH).filter(ImageFilter.GaussianBlur(28))
-bg = ImageEnhance.Brightness(bg).enhance(0.82)
+# blurred background that fills the whole canvas (same scene -> same tones)
+bg = cover(src, CW, CH).filter(ImageFilter.GaussianBlur(40))
+bg = ImageEnhance.Brightness(bg).enhance(0.92)
 
 # sharp full photo scaled to full canvas height, centered
 fw = round(sw * CH / sh)
 fg = src.resize((fw, CH), Image.LANCZOS)
 x = (CW - fw) // 2
-# soft feather seam: paste with a subtle shadow line
+
+# feather the left/right edges of the sharp photo so it dissolves into the
+# blurred background with no visible seam (does not look "cropped")
+feather = round(fw * 0.22)  # ~px of fade on each side
+mask = Image.new("L", (fw, CH), 255)
+px = mask.load()
+for i in range(feather):
+    a = round(255 * (i / feather))
+    for y in range(CH):
+        px[i, y] = a
+        px[fw - 1 - i, y] = a
+
 canvas = bg.copy()
-canvas.paste(fg, (x, 0))
+canvas.paste(fg, (x, 0), mask)
 
 p = os.path.join(OUT, "hero.jpg")
 canvas.save(p, "JPEG", quality=86, optimize=True, progressive=True)
-print("hero.jpg", canvas.size, "sharp width", fw, os.path.getsize(p) // 1024, "KB")
+print("hero.jpg", canvas.size, "sharp width", fw, "feather", feather,
+      os.path.getsize(p) // 1024, "KB")
