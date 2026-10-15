@@ -1177,7 +1177,7 @@ ul{margin:0;padding:0;list-style:none}
   display:flex;align-items:center;overflow:hidden;background:var(--ink)}
 .hero--bg::before{content:none}
 .hero__bg{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;
-  object-position:center 28%;z-index:0}
+  object-position:center top;z-index:0}
 .hero__overlay{position:absolute;inset:0;z-index:1;background:
   linear-gradient(to left,rgba(5,22,27,.84),rgba(5,22,27,.5) 48%,rgba(5,22,27,.24)),
   linear-gradient(to top,rgba(5,22,27,.6),rgba(5,22,27,0) 42%)}
