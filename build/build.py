@@ -249,28 +249,20 @@ def page(path, title, desc, body, extra_head="", extra_foot=""):
 
 def hero_block(rp):
     return f"""
-<section class="hero hero--showcase">
-  <div class="wrap">
-    <div class="hero__text">
-      <span class="eyebrow">{icon('globe')} خدمات إدارية لتجهيز مستندات السفر</span>
-      <h1>رحلتك تبدأ من هنا</h1>
-      <p class="lead">تفكر تسافر لأمريكا أو كندا أو أستراليا؟ تعرّف على خدماتنا الخاصة في
-         تجهيز وتنظيم مستندات طلب التأشيرة، بخطوات واضحة، وأسعار معلنة،
-         ودعم باللغة العربية.</p>
-      <div class="hero__cta">
-        <a class="btn btn--primary btn--lg" href="{rp}services/index.html">ابدأ طلب الخدمة</a>
-        <a class="btn btn--ghost btn--lg" href="#destinations">استكشف الوجهات {icon('arrow')}</a>
-      </div>
-      <ul class="hero__badges">
-        <li>{icon('check')} أسعار معلنة ورسوم منفصلة</li>
-        <li>{icon('check')} خطوات واضحة بالعربية</li>
-        <li>{icon('check')} بدون وعود بقبول مضمون</li>
-      </ul>
+<section class="hero hero--bg">
+  <img class="hero__bg" src="{rp}assets/img/photos/hero.jpg" width="1448" height="1086"
+       fetchpriority="high"
+       alt="وجهات أمريكا وكندا وأستراليا — معالم سيدني وتورنتو ونيويورك مع جوازات سفر">
+  <span class="hero__overlay" aria-hidden="true"></span>
+  <div class="wrap hero__content">
+    <span class="eyebrow eyebrow--light">{icon('globe')} خدمات تجهيز مستندات السفر</span>
+    <h1>رحلتك تبدأ من هنا</h1>
+    <p class="lead">خدمات خاصة لتجهيز وتنظيم مستندات تأشيرة الزيارة لأمريكا وكندا
+       وأستراليا — بخطوات واضحة وأسعار معلنة ودعم بالعربية.</p>
+    <div class="hero__cta">
+      <a class="btn btn--primary btn--lg" href="{rp}services/index.html">ابدأ طلب الخدمة</a>
+      <a class="btn btn--light btn--lg" href="#destinations">استكشف الوجهات {icon('arrow')}</a>
     </div>
-    <figure class="hero__showcase">
-      <img src="{rp}assets/img/photos/hero.jpg" width="1448" height="1086" fetchpriority="high"
-           alt="وجهات أمريكا وكندا وأستراليا — معالم سيدني وتورنتو ونيويورك مع جوازات سفر وبطاقة صعود">
-    </figure>
   </div>
 </section>"""
 
@@ -1180,15 +1172,21 @@ ul{margin:0;padding:0;list-style:none}
   linear-gradient(180deg,#fff, var(--bg))}
 .hero__inner{display:grid;grid-template-columns:1.1fr .9fr;gap:2.5rem;align-items:center;
   padding-block:clamp(2.5rem,6vw,5rem)}
-/* showcase hero: centered text + big full-width image */
-.hero--showcase{padding-block:clamp(2.2rem,5vw,3.6rem)}
-.hero--showcase .hero__text{max-width:820px;margin-inline:auto;text-align:center}
-.hero--showcase .lead{max-width:62ch;margin-inline:auto}
-.hero--showcase .hero__cta{justify-content:center}
-.hero--showcase .hero__badges{justify-content:center}
-.hero__showcase{margin:2.2rem auto 0;max-width:1120px}
-.hero__showcase img{width:100%;height:auto;border-radius:22px;
-  box-shadow:0 24px 60px rgba(11,31,42,.18);border:1px solid rgba(255,255,255,.6)}
+/* full-bleed background hero: image first, content over it */
+.hero--bg{position:relative;isolation:isolate;min-height:clamp(460px,66vh,640px);
+  display:flex;align-items:center;overflow:hidden;background:var(--ink)}
+.hero--bg::before{content:none}
+.hero__bg{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;
+  object-position:center 28%;z-index:0}
+.hero__overlay{position:absolute;inset:0;z-index:1;background:
+  linear-gradient(to left,rgba(5,22,27,.84),rgba(5,22,27,.5) 48%,rgba(5,22,27,.24)),
+  linear-gradient(to top,rgba(5,22,27,.6),rgba(5,22,27,0) 42%)}
+.hero--bg .hero__content{position:relative;z-index:2;color:#fff;max-width:600px;
+  padding-block:clamp(2.6rem,6vw,4.2rem)}
+.hero--bg h1{color:#fff;text-shadow:0 2px 22px rgba(0,0,0,.45)}
+.hero--bg .lead{color:#e9f2f3;max-width:46ch;text-shadow:0 1px 12px rgba(0,0,0,.4)}
+.eyebrow--light{background:rgba(255,255,255,.16);color:#fff;border:1px solid rgba(255,255,255,.3)}
+.eyebrow--light .ic{color:#fff}
 .eyebrow{display:inline-flex;align-items:center;gap:.4rem;background:var(--primary-l);
   color:var(--primary-d);font-weight:700;font-size:.85rem;padding:.4rem .8rem;border-radius:999px;
   margin-bottom:1rem}
@@ -1485,6 +1483,9 @@ ul{margin:0;padding:0;list-style:none}
   .site-foot__bottom{flex-direction:column;gap:.3rem}
   .topbar__hours{display:none}
   .topbar__row{justify-content:center}
+  .hero--bg{min-height:clamp(420px,64vh,560px)}
+  .hero__overlay{background:linear-gradient(to top,rgba(5,22,27,.8),rgba(5,22,27,.42))}
+  .hero--bg .hero__cta .btn{flex:1 1 auto}
 }
 @media(prefers-reduced-motion:reduce){*{scroll-behavior:auto;transition:none!important}}
 """
