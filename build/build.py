@@ -250,7 +250,7 @@ def page(path, title, desc, body, extra_head="", extra_foot=""):
 def hero_block(rp):
     return f"""
 <section class="hero hero--bg">
-  <img class="hero__bg" src="{rp}assets/img/photos/hero.jpg" width="1448" height="1086"
+  <img class="hero__bg" src="{rp}assets/img/photos/hero.jpg" width="2000" height="1000"
        fetchpriority="high"
        alt="وجهات أمريكا وكندا وأستراليا — معالم سيدني وتورنتو ونيويورك مع جوازات سفر">
   <span class="hero__overlay" aria-hidden="true"></span>
@@ -1173,16 +1173,16 @@ ul{margin:0;padding:0;list-style:none}
 .hero__inner{display:grid;grid-template-columns:1.1fr .9fr;gap:2.5rem;align-items:center;
   padding-block:clamp(2.5rem,6vw,5rem)}
 /* full-bleed background hero: image first, content over it */
-.hero--bg{position:relative;isolation:isolate;min-height:clamp(460px,66vh,640px);
+.hero--bg{position:relative;isolation:isolate;aspect-ratio:2/1;
   display:flex;align-items:center;overflow:hidden;background:var(--ink)}
 .hero--bg::before{content:none}
 .hero__bg{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;
-  object-position:center top;z-index:0}
+  object-position:center;z-index:0}
 .hero__overlay{position:absolute;inset:0;z-index:1;background:
   linear-gradient(to left,rgba(5,22,27,.84),rgba(5,22,27,.5) 48%,rgba(5,22,27,.24)),
   linear-gradient(to top,rgba(5,22,27,.6),rgba(5,22,27,0) 42%)}
 .hero--bg .hero__content{position:relative;z-index:2;color:#fff;max-width:600px;
-  padding-block:clamp(2.6rem,6vw,4.2rem)}
+  padding-block:1.2rem}
 .hero--bg h1{color:#fff;text-shadow:0 2px 22px rgba(0,0,0,.45)}
 .hero--bg .lead{color:#e9f2f3;max-width:46ch;text-shadow:0 1px 12px rgba(0,0,0,.4)}
 .eyebrow--light{background:rgba(255,255,255,.16);color:#fff;border:1px solid rgba(255,255,255,.3)}
@@ -1483,8 +1483,8 @@ ul{margin:0;padding:0;list-style:none}
   .site-foot__bottom{flex-direction:column;gap:.3rem}
   .topbar__hours{display:none}
   .topbar__row{justify-content:center}
-  .hero--bg{min-height:clamp(420px,64vh,560px)}
-  .hero__overlay{background:linear-gradient(to top,rgba(5,22,27,.8),rgba(5,22,27,.42))}
+  .hero--bg{aspect-ratio:3/4}
+  .hero__overlay{background:linear-gradient(to top,rgba(5,22,27,.82),rgba(5,22,27,.5))}
   .hero--bg .hero__cta .btn{flex:1 1 auto}
 }
 @media(prefers-reduced-motion:reduce){*{scroll-behavior:auto;transition:none!important}}
