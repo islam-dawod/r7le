@@ -249,8 +249,8 @@ def page(path, title, desc, body, extra_head="", extra_foot=""):
 
 def hero_block(rp):
     return f"""
-<section class="hero">
-  <div class="wrap hero__inner">
+<section class="hero hero--showcase">
+  <div class="wrap">
     <div class="hero__text">
       <span class="eyebrow">{icon('globe')} خدمات إدارية لتجهيز مستندات السفر</span>
       <h1>رحلتك تبدأ من هنا</h1>
@@ -267,18 +267,10 @@ def hero_block(rp):
         <li>{icon('check')} بدون وعود بقبول مضمون</li>
       </ul>
     </div>
-    <div class="hero__media">
-      <img src="{rp}assets/img/photos/hero.jpg" width="1500" height="1000"
-           alt="ميناء سيدني — دار الأوبرا وجسر الميناء في أستراليا" fetchpriority="high">
-      <div class="hero__ticket" aria-hidden="true">
-        <span class="hero__ticket-head">رحلة re7le {icon('globe')}</span>
-        <div class="hero__ticket-route">
-          <div><b>العراق</b><small>بغداد / المحافظات</small></div>
-          <span class="hero__plane">{icon('arrow')}</span>
-          <div><b>الوجهة</b><small>USA · CA · AU</small></div>
-        </div>
-      </div>
-    </div>
+    <figure class="hero__showcase">
+      <img src="{rp}assets/img/photos/hero.jpg" width="1448" height="1086" fetchpriority="high"
+           alt="وجهات أمريكا وكندا وأستراليا — معالم سيدني وتورنتو ونيويورك مع جوازات سفر وبطاقة صعود">
+    </figure>
   </div>
 </section>"""
 
@@ -1188,6 +1180,15 @@ ul{margin:0;padding:0;list-style:none}
   linear-gradient(180deg,#fff, var(--bg))}
 .hero__inner{display:grid;grid-template-columns:1.1fr .9fr;gap:2.5rem;align-items:center;
   padding-block:clamp(2.5rem,6vw,5rem)}
+/* showcase hero: centered text + big full-width image */
+.hero--showcase{padding-block:clamp(2.2rem,5vw,3.6rem)}
+.hero--showcase .hero__text{max-width:820px;margin-inline:auto;text-align:center}
+.hero--showcase .lead{max-width:62ch;margin-inline:auto}
+.hero--showcase .hero__cta{justify-content:center}
+.hero--showcase .hero__badges{justify-content:center}
+.hero__showcase{margin:2.2rem auto 0;max-width:1120px}
+.hero__showcase img{width:100%;height:auto;border-radius:22px;
+  box-shadow:0 24px 60px rgba(11,31,42,.18);border:1px solid rgba(255,255,255,.6)}
 .eyebrow{display:inline-flex;align-items:center;gap:.4rem;background:var(--primary-l);
   color:var(--primary-d);font-weight:700;font-size:.85rem;padding:.4rem .8rem;border-radius:999px;
   margin-bottom:1rem}
