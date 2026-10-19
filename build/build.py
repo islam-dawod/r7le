@@ -546,8 +546,10 @@ def build_home():
 
 def destination_body(rp, slug, title, kicker, intro, services_filter, sections):
     crumb = breadcrumb([("/", "الرئيسية"), (f"/{slug}/", title)], rp)
-    svc = ''.join(package_card(p, services_filter, rp)
-                  for p in PACKAGES.get(services_filter, []))
+    pkgs = PACKAGES.get(services_filter, [])
+    svc = ''.join(package_card(p, services_filter, rp) for p in pkgs)
+    svc_wrap = (f'<div class="pkg-single">{svc}</div>' if len(pkgs) == 1
+                else f'<div class="grid grid--2">{svc}</div>')
     sec_html = ""
     for h, items in sections:
         li = ''.join(f"<li>{icon('check')}<span>{x}</span></li>" for x in items)
@@ -569,7 +571,7 @@ def destination_body(rp, slug, title, kicker, intro, services_filter, sections):
     {shead("الباقات والأسعار", "باقات التأشيرة السياحية",
            "الأسعار بالدينار العراقي وتمثّل رسوم الخدمة فقط؛ الرسوم الحكومية منفصلة. "
            "كل باقة توضّح ما تشمل وما لا تشمل والمخرجات.")}
-    <div class="grid grid--2">{svc}</div>
+    {svc_wrap}
   </div>
 </section>
 <section class="section section--alt">
@@ -637,11 +639,13 @@ def build_services():
     groups = ""
     for dest, pkgs in PACKAGES.items():
         cards_g = ''.join(package_card(p, dest, rp) for p in pkgs)
+        wrap_g = (f'<div class="pkg-single">{cards_g}</div>' if len(pkgs) == 1
+                  else f'<div class="grid grid--2">{cards_g}</div>')
         groups += f"""
 <section class="section pkg-group">
   <div class="wrap">
     {shead("باقات " + dest, "باقات تأشيرة الزيارة — " + dest)}
-    <div class="grid grid--2">{cards_g}</div>
+    {wrap_g}
     <p class="center"><a class="link-arrow" href="{rp}{dest_slug[dest]}/index.html">تفاصيل وجهة {dest} {icon('arrow')}</a></p>
   </div>
 </section>"""
@@ -1305,6 +1309,7 @@ ul{margin:0;padding:0;list-style:none}
 .svc__meta{display:flex;gap:.4rem;align-items:center;color:var(--muted);font-size:.85rem;margin:.1rem 0 .4rem}
 .svc__meta .ic{color:var(--primary);width:1.1em;height:1.1em}
 .pkg-group+.pkg-group{padding-top:0}
+.pkg-single{max-width:560px;margin-inline:auto}
 
 /* numbered list */
 .numlist{counter-reset:n;display:grid;gap:.8rem;max-width:860px;margin-inline:auto}
