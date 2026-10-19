@@ -222,10 +222,20 @@ ul{margin:0;padding:0;list-style:none}
   text-transform:uppercase;letter-spacing:.03em}
 .svc__cols{display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin:.4rem 0}
 .svc__price{background:var(--accent);color:#3a2600;font-weight:700;border-radius:var(--r-sm);
-  padding:.7rem .9rem;display:flex;gap:.5rem;align-items:flex-start;font-size:.92rem;margin-top:auto}
+  padding:.7rem .9rem;display:flex;gap:.5rem;align-items:flex-start;font-size:.88rem}
 .svc__price .ic{color:#3a2600}
 .svc__note{font-size:.82rem;color:var(--muted)}
-.svc__cta{display:flex;flex-direction:column;gap:.5rem;margin-top:.4rem}
+.svc__cta{display:flex;flex-direction:column;gap:.5rem;margin-top:auto;padding-top:.6rem}
+/* package extras */
+.svc__tags{display:flex;gap:.4rem;align-items:center}
+.svc__badge{background:var(--accent);color:#3a2600;font-weight:800;font-size:.72rem;
+  padding:.22rem .6rem;border-radius:999px}
+.svc__priceline{display:flex;align-items:baseline;gap:.35rem;margin:.4rem 0 .2rem}
+.svc__amount{font-size:1.9rem;font-weight:800;color:var(--primary-d);line-height:1;direction:ltr}
+.svc__cur{font-weight:700;color:var(--muted);font-size:1rem}
+.svc__meta{display:flex;gap:.4rem;align-items:center;color:var(--muted);font-size:.85rem;margin:.1rem 0 .4rem}
+.svc__meta .ic{color:var(--primary);width:1.1em;height:1.1em}
+.pkg-group+.pkg-group{padding-top:0}
 
 /* numbered list */
 .numlist{counter-reset:n;display:grid;gap:.8rem;max-width:860px;margin-inline:auto}

@@ -442,75 +442,128 @@ def breadcrumb(items, rp):
     return f'<nav class="crumbs" aria-label="مسار التصفح"><div class="wrap"><ol>{lis}</ol></div></nav>'
 
 
-# ---------- Service data ----------
-SERVICES = [
-    {
-        "sku": "USA-B1B2-DOC",
-        "dest": "أمريكا", "flag": "USA",
-        "name": "تجهيز مستندات تأشيرة الزيارة B1/B2",
-        "desc": "دعم إداري في ترتيب وتنظيم مستندات طلب الزيارة، وتحضير قائمة الملفات "
-                "المطلوبة قبل الموعد.",
-        "deliver": ["قائمة مستندات مخصّصة لحالتك", "مراجعة اكتمال الملف الإداري",
-                    "تحضير إجرائي عام للمقابلة ضمن المسموح"],
-        "incl": ["ترتيب وتنظيم المستندات", "مساعدة إدارية في بيانات النموذج DS-160"],
-        "excl": ["ضمان الموعد أو نتيجة الطلب", "استشارة هجرة فردية أو تمثيل قانوني"],
-        "price": "تُعرض رسوم الشركة بصورة منفصلة عن الرسوم الحكومية.",
-    },
-    {
-        "sku": "CA-VISIT-DOC",
-        "dest": "كندا", "flag": "CA",
-        "name": "تنظيم مستندات الزيارة السياحية/العائلية",
-        "desc": "ترتيب أوراق الزيارة ومراجعة اكتمال الملف الإداري، مع مقالات معلوماتية "
-                "عن البرامج المختلفة.",
-        "deliver": ["مراجعة اكتمال الملف الإداري", "قائمة مستندات الزيارة",
-                    "مقالات معلوماتية موثّقة بالمصادر"],
-        "incl": ["تنظيم مستندات الزيارة", "مراجعة اكتمال الملف"],
-        "excl": ["نصيحة هجرة فردية", "تمثيل مدفوع بلا صفة مخوّلة"],
-        "price": "تُعرض رسوم الشركة بصورة منفصلة عن الرسوم الحكومية.",
-    },
-    {
-        "sku": "AU-SC600-DOC",
-        "dest": "أستراليا", "flag": "AU",
-        "name": "تنظيم مستندات تأشيرة الزيارة Subclass 600",
-        "desc": "تنظيم مستندات الزيارة ونقل المعلومات وإدخال البيانات إداريًا حيث يكون "
-                "ذلك مشروعًا.",
-        "deliver": ["تنظيم مستندات Subclass 600", "فحص حدود وأهلية «immigrationassistance»",
-                    "إدخال بيانات إداري ضمن المسموح"],
-        "incl": ["تنظيم المستندات", "نقل المعلومات وإدخال البيانات إداريًا"],
-        "excl": ["تقديم صفة مهنية غير مخوّلة", "ضمان نتيجة الطلب"],
-        "price": "تُعرض رسوم الشركة بصورة منفصلة عن الرسوم الحكومية.",
-    },
-]
+# ---------- Packages data (tourism/visit only) ----------
+# Prices shown in Iraqi Dinar (IQD). These are the company service fee only;
+# government fees are separate. Amounts are converted/rounded and must be
+# confirmed by the project owner before launch (Section 16).
+
+def iqd(n):
+    return f"{n:,}"
 
 
-def service_card(s, rp, detailed=False):
-    deliver = ''.join(f"<li>{icon('check')}<span>{x}</span></li>" for x in s["deliver"])
-    incl = ''.join(f"<li>{icon('check')}<span>{x}</span></li>" for x in s["incl"])
-    excl = ''.join(f"<li>{icon('x')}<span>{x}</span></li>" for x in s["excl"])
-    extra = ""
-    if detailed:
-        extra = f"""
-      <div class="svc__cols">
-        <div><h4>تشمل الخدمة</h4><ul class="ticklist">{incl}</ul></div>
-        <div><h4>لا تشمل</h4><ul class="ticklist ticklist--no">{excl}</ul></div>
-      </div>"""
+PACKAGES = {
+    "أمريكا": [
+        {
+            "sku": "USA-DOC-IND", "price": 490000, "duration": "حتى 60 يوم عمل",
+            "name": "تجهيز وتنظيم المستندات — فردي",
+            "desc": "مساعدة إدارية لتجهيز ومراجعة وتنظيم مستندات طلب واحد لشخص واحد، "
+                    "وتقديمه بعد موافقتك على بياناته.",
+            "deliver": ["قائمة مستندات وفق التعليمات الرسمية", "مراجعة اكتمال الملف",
+                        "المساعدة في تعبئة النماذج وتجهيز الملف النهائي"],
+            "incl": ["جمع المعلومات والمستندات", "تنظيم المستندات والتقديم بعد موافقتك"],
+            "excl": ["الرسوم الحكومية", "الاستشارات أو التمثيل القانوني", "الترجمة والتصديق"],
+        },
+        {
+            "sku": "USA-B1B2", "price": 710000, "duration": "~5 أيام عمل (لا تشمل معالجة السلطات)",
+            "badge": "الأكثر طلبًا",
+            "name": "تجهيز وتقديم طلب تأشيرة الزيارة B1/B2",
+            "desc": "مراجعة وتجهيز المستندات المطلوبة، والمساعدة في إعداد الطلب وشرح خطوات "
+                    "التقديم، وتقديم الطلب بعد موافقتك على بياناته النهائية.",
+            "deliver": ["مراجعة وتجهيز مستندات الطلب", "المساعدة في بيانات النموذج DS-160",
+                        "تقديم الطلب بعد موافقتك"],
+            "incl": ["تجهيز وتنظيم المستندات", "شرح خطوات التقديم"],
+            "excl": ["ضمان القبول أو الموعد أو مدة المعالجة", "الرسوم الحكومية"],
+        },
+        {
+            "sku": "USA-DOC-FAM", "price": 840000, "duration": "حتى 60 يوم عمل",
+            "name": "تجهيز وتنظيم المستندات — عائلي",
+            "desc": "مساندة إدارية لتجهيز وتنظيم مستندات إجراء واحد للعائلة (حتى بالغَين "
+                    "وأربعة أطفال)، مع تحديد المستفيدين في الطلب.",
+            "deliver": ["قائمة مستندات العائلة", "مراجعة اكتمال الملف إداريًا",
+                        "تسليم ملف منظّم بعد موافقتك"],
+            "incl": ["تنظيم مستندات العائلة", "إدخال البيانات المقدَّمة من العميل"],
+            "excl": ["الرسوم الحكومية", "الاستشارات أو التمثيل القانوني"],
+        },
+        {
+            "sku": "USA-INT", "price": 710000, "duration": "جلسة تحضير",
+            "name": "التحضير لمقابلة B1/B2 والمساعدة في إيجاد أقرب موعد",
+            "desc": "جلسة تحضير ومحاكاة للمقابلة وإرشادات، والمساعدة في التحقق من المواعيد "
+                    "الأبكر المتاحة عبر النظام الرسمي وبموافقتك ووفق قواعده.",
+            "deliver": ["جلسة محاكاة وإرشادات للمقابلة", "مراجعة خطوات الاستعداد",
+                        "التحقق من أقرب موعد متاح بموافقتك"],
+            "incl": ["تحضير إجرائي للمقابلة", "المساعدة في فحص المواعيد"],
+            "excl": ["بيع موعد رسمي", "ضمان تاريخ محدد أو قبول التأشيرة"],
+        },
+    ],
+    "كندا": [
+        {
+            "sku": "CA-GUIDE", "price": 70000, "duration": "ملف PDF خلال يومي عمل",
+            "name": "دليل معلومات تأشيرات كندا",
+            "desc": "دليل إلكتروني يشرح خطوات التقديم العامة والمستندات الشائعة، مع روابط "
+                    "التعليمات الحكومية الرسمية.",
+            "deliver": ["ملف PDF منظّم", "قائمة المستندات الشائعة", "روابط المصادر الرسمية"],
+            "incl": ["شرح الخطوات العامة", "روابط التعليمات الرسمية"],
+            "excl": ["مراجعة ملف شخصي", "تقديم الطلب نيابة عنك"],
+        },
+        {
+            "sku": "CA-VISIT", "price": 710000, "duration": "5–7 أيام عمل",
+            "badge": "الأكثر طلبًا",
+            "name": "تجهيز مستندات تأشيرة الزيارة إلى كندا",
+            "desc": "تجهيز وتنظيم المستندات الداعمة لطلب الزيارة، مع إعداد مسودات غرض السفر "
+                    "وخطة الرحلة بناءً على بياناتك.",
+            "deliver": ["قائمة مستندات الزيارة", "مسودة غرض السفر وخطة الرحلة",
+                        "مراجعة اكتمال الملف إداريًا"],
+            "incl": ["تجهيز وتنظيم مستندات الزيارة", "إعداد المسودات الوصفية"],
+            "excl": ["نصيحة هجرة فردية", "الرسوم الحكومية", "تمثيل بلا صفة مخوّلة"],
+        },
+    ],
+    "أستراليا": [
+        {
+            "sku": "AU-SC600", "price": 1430000, "duration": "حسب الطلب",
+            "badge": "الأكثر طلبًا",
+            "name": "باقة تأشيرة الزيارة — Subclass 600",
+            "desc": "مساعدة إدارية في تجهيز وتنظيم مستندات طلب تأشيرة الزيارة، من تعبئة "
+                    "النماذج حتى التحضير للمقابلة، مع متابعة إدارية.",
+            "deliver": ["تنظيم مستندات Subclass 600", "المساعدة في تعبئة النماذج",
+                        "تحضير إجرائي للمقابلة ومتابعة"],
+            "incl": ["تجهيز وتنظيم المستندات", "نقل المعلومات وإدخال البيانات إداريًا"],
+            "excl": ["صفة مهنية غير مخوّلة", "ضمان نتيجة الطلب", "الرسوم الحكومية"],
+        },
+    ],
+}
+
+
+def package_card(p, dest, rp):
+    deliver = ''.join(f"<li>{icon('check')}<span>{x}</span></li>" for x in p["deliver"])
+    incl = ''.join(f"<li>{icon('check')}<span>{x}</span></li>" for x in p["incl"])
+    excl = ''.join(f"<li>{icon('x')}<span>{x}</span></li>" for x in p["excl"])
+    badge = (f'<span class="svc__badge">{p["badge"]}</span>' if p.get("badge") else "")
     return f"""
     <article class="svc">
       <div class="svc__head">
-        <span class="chip">{s['dest']}</span>
-        <span class="sku">SKU: {s['sku']}</span>
+        <span class="svc__tags"><span class="chip">{dest}</span>{badge}</span>
+        <span class="sku">SKU: {p['sku']}</span>
       </div>
-      <h3>{s['name']}</h3>
-      <p class="svc__desc">{s['desc']}</p>
+      <h3>{p['name']}</h3>
+      <p class="svc__desc">{p['desc']}</p>
+      <div class="svc__priceline">
+        <span class="svc__amount">{iqd(p['price'])}</span><span class="svc__cur">د.ع</span>
+      </div>
+      <p class="svc__meta">{icon('clock')} مدة التنفيذ: {p['duration']}</p>
       <div class="svc__block">
         <h4>ما ستستلمه (Deliverables)</h4>
         <ul class="ticklist">{deliver}</ul>
-      </div>{extra}
-      <p class="svc__price">{icon('card')} {s['price']}</p>
-      <p class="svc__note">يبدأ التنفيذ بعد تأكيد الدفع والتحقق منه. المدة الإدارية تقديرية
-         ولا تضمن مدة قرار السفارة.</p>
+      </div>
+      <div class="svc__cols">
+        <div><h4>تشمل الباقة</h4><ul class="ticklist">{incl}</ul></div>
+        <div><h4>لا تشمل</h4><ul class="ticklist ticklist--no">{excl}</ul></div>
+      </div>
+      <p class="svc__price">{icon('card')} رسوم الخدمة فقط — الرسوم الحكومية منفصلة وتُدفع
+         للجهات المختصة مباشرةً.</p>
+      <p class="svc__note">يبدأ التنفيذ بعد تأكيد الدفع والتحقق منه. المدة تقديرية ولا تضمن
+         قبول التأشيرة أو مدة قرار الجهة المختصة.</p>
       <div class="svc__cta">
-        <a class="btn btn--primary btn--block" href="{rp}client/index.html#order">ابدأ طلب هذه الخدمة</a>
+        <a class="btn btn--primary btn--block" href="{rp}client/index.html#order">ابدأ طلب الباقة</a>
         <a class="btn btn--ghost btn--block" href="{rp}terms/index.html">اقرأ الشروط</a>
       </div>
     </article>"""
@@ -531,8 +584,8 @@ def build_home():
 
 def destination_body(rp, slug, title, kicker, intro, services_filter, sections):
     crumb = breadcrumb([("/", "الرئيسية"), (f"/{slug}/", title)], rp)
-    svc = ''.join(service_card(s, rp, detailed=True)
-                  for s in SERVICES if s["dest"] == services_filter)
+    svc = ''.join(package_card(p, services_filter, rp)
+                  for p in PACKAGES.get(services_filter, []))
     sec_html = ""
     for h, items in sections:
         li = ''.join(f"<li>{icon('check')}<span>{x}</span></li>" for x in items)
@@ -551,8 +604,9 @@ def destination_body(rp, slug, title, kicker, intro, services_filter, sections):
             + f"""
 <section class="section">
   <div class="wrap">
-    <div class="section__head"><h2>الخدمات المتاحة</h2>
-      <p>كل بطاقة خدمة توضّح ما تشمل وما لا تشمل، والمخرجات، والسعر والرسوم بشكل منفصل.</p></div>
+    {shead("الباقات والأسعار", "باقات التأشيرة السياحية",
+           "الأسعار بالدينار العراقي وتمثّل رسوم الخدمة فقط؛ الرسوم الحكومية منفصلة. "
+           "كل باقة توضّح ما تشمل وما لا تشمل والمخرجات.")}
     <div class="grid grid--2">{svc}</div>
   </div>
 </section>
@@ -617,7 +671,18 @@ def build_australia():
 def build_services():
     rp = rel_prefix("/services/")
     crumb = breadcrumb([("/", "الرئيسية"), ("/services/", "الخدمات")], rp)
-    cards = ''.join(service_card(s, rp, detailed=True) for s in SERVICES)
+    dest_slug = {"أمريكا": "usa", "كندا": "canada", "أستراليا": "australia"}
+    groups = ""
+    for dest, pkgs in PACKAGES.items():
+        cards_g = ''.join(package_card(p, dest, rp) for p in pkgs)
+        groups += f"""
+<section class="section pkg-group">
+  <div class="wrap">
+    {shead("باقات " + dest, "باقات تأشيرة الزيارة — " + dest)}
+    <div class="grid grid--2">{cards_g}</div>
+    <p class="center"><a class="link-arrow" href="{rp}{dest_slug[dest]}/index.html">تفاصيل وجهة {dest} {icon('arrow')}</a></p>
+  </div>
+</section>"""
     fields = [
         "اسم دقيق للخدمة بلغتين عند الحاجة، ورمز داخلي SKU.",
         "وصف من سطرين وما سيستلمه العميل فعليًا (Deliverables).",
@@ -631,15 +696,12 @@ def build_services():
     fl = ''.join(f"<li><span class='num'>{i}</span><span>{t}</span></li>"
                  for i, t in enumerate(fields, 1))
     body = (crumb + page_hero(
-        "الخدمات والأسعار", "كتالوج الخدمات القابلة للبيع مع الأسعار والنطاق. القوائم أدناه "
-        "اقتراحية وتخضع لاعتماد قانوني قبل النشر، ولا تمثّل أسعارًا نهائية بعد.",
-        "كتالوج · Services")
+        "الباقات والأسعار", "باقات التأشيرة السياحية لأمريكا وكندا وأستراليا. الأسعار "
+        "بالدينار العراقي وتمثّل رسوم الخدمة فقط؛ الرسوم الحكومية منفصلة وتُدفع للجهات "
+        "المختصة. الأسعار قابلة للتعديل قبل الاعتماد النهائي.",
+        "كتالوج · Packages")
+            + groups
             + f"""
-<section class="section">
-  <div class="wrap">
-    <div class="grid grid--2">{cards}</div>
-  </div>
-</section>
 <section class="section section--alt">
   <div class="wrap">
     <div class="section__head"><h2>الحقول الإلزامية في بطاقة كل خدمة</h2>
@@ -1303,10 +1365,20 @@ ul{margin:0;padding:0;list-style:none}
   text-transform:uppercase;letter-spacing:.03em}
 .svc__cols{display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin:.4rem 0}
 .svc__price{background:var(--accent);color:#3a2600;font-weight:700;border-radius:var(--r-sm);
-  padding:.7rem .9rem;display:flex;gap:.5rem;align-items:flex-start;font-size:.92rem;margin-top:auto}
+  padding:.7rem .9rem;display:flex;gap:.5rem;align-items:flex-start;font-size:.88rem}
 .svc__price .ic{color:#3a2600}
 .svc__note{font-size:.82rem;color:var(--muted)}
-.svc__cta{display:flex;flex-direction:column;gap:.5rem;margin-top:.4rem}
+.svc__cta{display:flex;flex-direction:column;gap:.5rem;margin-top:auto;padding-top:.6rem}
+/* package extras */
+.svc__tags{display:flex;gap:.4rem;align-items:center}
+.svc__badge{background:var(--accent);color:#3a2600;font-weight:800;font-size:.72rem;
+  padding:.22rem .6rem;border-radius:999px}
+.svc__priceline{display:flex;align-items:baseline;gap:.35rem;margin:.4rem 0 .2rem}
+.svc__amount{font-size:1.9rem;font-weight:800;color:var(--primary-d);line-height:1;direction:ltr}
+.svc__cur{font-weight:700;color:var(--muted);font-size:1rem}
+.svc__meta{display:flex;gap:.4rem;align-items:center;color:var(--muted);font-size:.85rem;margin:.1rem 0 .4rem}
+.svc__meta .ic{color:var(--primary);width:1.1em;height:1.1em}
+.pkg-group+.pkg-group{padding-top:0}
 
 /* numbered list */
 .numlist{counter-reset:n;display:grid;gap:.8rem;max-width:860px;margin-inline:auto}
