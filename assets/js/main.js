@@ -34,4 +34,23 @@
       if (icn) icn.textContent = open ? "+" : "–";
     });
   });
+
+  // Prefill the order summary from ?dest=&pkg= (auto destination, no login)
+  var box = document.getElementById("order-summary");
+  if (box) {
+    var params = new URLSearchParams(location.search);
+    var dest = params.get("dest");
+    var pkg = params.get("pkg");
+    if (dest || pkg) {
+      var pkgEl = document.getElementById("order-pkg");
+      var destEl = document.getElementById("order-dest");
+      if (pkgEl) pkgEl.textContent = pkg || "باقة";
+      if (destEl) { if (dest) destEl.textContent = dest; else destEl.hidden = true; }
+      var di = document.getElementById("order-dest-input");
+      var pi = document.getElementById("order-pkg-input");
+      if (di) di.value = dest || "";
+      if (pi) pi.value = pkg || "";
+      box.hidden = false;
+    }
+  }
 })();

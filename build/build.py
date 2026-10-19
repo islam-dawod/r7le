@@ -10,6 +10,7 @@ Output is written to the repository root (one folder per route + /assets).
 import os
 import pathlib
 import datetime
+from urllib.parse import quote
 
 ROOT = pathlib.Path(__file__).resolve().parent.parent
 TODAY = "13 أكتوبر 2026"
@@ -563,8 +564,8 @@ def package_card(p, dest, rp):
       <p class="svc__note">يبدأ التنفيذ بعد تأكيد الدفع والتحقق منه. المدة تقديرية ولا تضمن
          قبول التأشيرة أو مدة قرار الجهة المختصة.</p>
       <div class="svc__cta">
-        <a class="btn btn--primary btn--block" href="{rp}client/index.html#order">ابدأ طلب الباقة</a>
-        <a class="btn btn--ghost btn--block" href="{rp}terms/index.html">اقرأ الشروط</a>
+        <a class="btn btn--primary btn--block"
+           href="{rp}client/index.html?dest={quote(dest)}&pkg={quote(p['name'])}#order">ابدأ طلب الباقة</a>
       </div>
     </article>"""
 
@@ -862,66 +863,56 @@ def build_client():
     rp = rel_prefix("/client/")
     crumb = breadcrumb([("/", "الرئيسية"), ("/client/", "حساب العميل")], rp)
     body = (crumb + page_hero(
-        "حساب العميل", "سجّل الدخول لمتابعة طلباتك ورفع المستندات المطلوبة بأمان. "
-        "الواجهة هنا تجريبية للعرض — الربط الفعلي يتم ضمن مرحلة المعاملات.",
-        "لوحة العميل")
+        "ابدأ طلب الباقة", "املأ بياناتك الأساسية لبدء الطلب — بدون تسجيل دخول ولا مستندات "
+        "حساسة في هذه الخطوة. تظهر الرسوم منفصلة قبل الدفع.",
+        "طلب الخدمة")
             + f"""
 <section class="section">
-  <div class="wrap grid grid--2 grid--top">
-    <div class="formcard">
-      <h2>{icon('lock')} تسجيل الدخول</h2>
-      <form class="form" onsubmit="return false">
-        <label>البريد الإلكتروني
-          <input type="email" autocomplete="email" placeholder="name@email.com" required></label>
-        <label>كلمة المرور
-          <input type="password" autocomplete="current-password" placeholder="••••••••" required></label>
-        <button class="btn btn--primary btn--block" type="submit">دخول آمن</button>
-        <p class="muted sm">محميّ بتحقق ثنائي (MFA) وإدارة جلسات آمنة.</p>
-      </form>
-    </div>
+  <div class="wrap narrow">
     <div class="formcard" id="order">
-      <h2>{icon('doc')} ابدأ طلب خدمة</h2>
+      <h2>{icon('doc')} بيانات الطلب</h2>
+      <div class="order-summary" id="order-summary" hidden>
+        <span class="order-summary__label">الباقة المختارة</span>
+        <strong id="order-pkg"></strong>
+        <span class="chip" id="order-dest"></span>
+      </div>
       <form class="form" onsubmit="return false">
-        <label>الوجهة
-          <select required>
-            <option value="">اختر الوجهة…</option>
-            <option>أمريكا — B1/B2</option>
-            <option>كندا — زيارة</option>
-            <option>أستراليا — Subclass 600</option>
-          </select></label>
+        <input type="hidden" id="order-dest-input" name="dest">
+        <input type="hidden" id="order-pkg-input" name="pkg">
         <label>الاسم الكامل <input type="text" placeholder="الاسم الثلاثي" required></label>
         <div class="form__row">
           <label>رقم الهاتف
             <input type="tel" inputmode="tel" dir="ltr" placeholder="+964 7XX XXX XXXX" required></label>
-          <label>المحافظة (إن كنت مقيمًا بالعراق)
+          <label>المحافظة (اختياري)
             <input type="text" placeholder="مثال: بغداد"></label>
         </div>
+        <label>البريد الإلكتروني (اختياري)
+          <input type="email" dir="ltr" autocomplete="email" placeholder="name@email.com"></label>
         <label class="check"><input type="checkbox" required>
           <span>أوافق على <a href="{rp}terms/index.html">الشروط</a> و<a href="{rp}privacypolicy/index.html">الخصوصية</a>.</span></label>
-        <label class="check"><input type="checkbox">
-          <span>أوافق على تواصل تسويقي اختياري.</span></label>
         <button class="btn btn--primary btn--block" type="submit">متابعة لمراجعة السعر</button>
-        <p class="muted sm">لا نطلب مستندات حساسة في هذه الخطوة. تظهر الرسوم منفصلة قبل الدفع.</p>
+        <p class="muted sm">لا نطلب تسجيل دخول في هذه الخطوة. بعد تأكيد الطلب يُنشأ لك رقم
+           مرجعي لمتابعته ورفع المستندات لاحقًا.</p>
       </form>
     </div>
   </div>
 </section>
 <section class="section section--alt">
   <div class="wrap">
-    <div class="section__head"><h2>ماذا يوفّر حساب العميل؟</h2></div>
+    {shead("بعد الطلب", "ماذا يحدث بعد إرسال طلبك؟")}
     <div class="grid grid--3">
-      <div class="feature">{icon('doc')}<h3>طلباتك وفواتيرك</h3>
-        <p>عرض الطلبات والفواتير والإيصالات، وتنزيل النسخ النهائية وفق سياسة الاحتفاظ.</p></div>
+      <div class="feature">{icon('doc')}<h3>رقم مرجعي وفاتورة</h3>
+        <p>يُنشأ رقم مرجعي للطلب، وتُعرض الطلبات والفواتير والإيصالات لمتابعتها.</p></div>
       <div class="feature">{icon('shield')}<h3>رفع آمن للمستندات</h3>
-        <p>قائمة المستندات المطلوبة مع رفع آمن، وتوضيح ما ينقص من العميل.</p></div>
+        <p>قائمة المستندات المطلوبة مع رفع آمن لاحقًا، وتوضيح ما ينقص منك.</p></div>
       <div class="feature">{icon('chat')}<h3>سجل رسائل لكل طلب</h3>
         <p>متابعة واضحة دون إظهار بيانات داخلية، مع المسؤول عن المتابعة.</p></div>
     </div>
   </div>
 </section>""")
-    page("/client/", "حساب العميل | متابعة الطلبات — رحلة R7LE",
-         "حساب عميل رحلة R7LE الآمن: متابعة الطلبات والفواتير، رفع المستندات، وسجل رسائل "
-         "لكل طلب، مع تحقق ثنائي وإدارة جلسات آمنة.", body)
+    page("/client/", "ابدأ طلب الباقة | رحلة R7LE",
+         "ابدأ طلب باقة تجهيز مستندات التأشيرة من رحلة R7LE ببيانات أساسية بدون تسجيل دخول، "
+         "مع إنشاء رقم مرجعي لمتابعة الطلب ورفع المستندات لاحقًا.", body)
 
 
 def build_aboutus():
@@ -1436,6 +1427,10 @@ ul{margin:0;padding:0;list-style:none}
 .form__row{display:grid;grid-template-columns:1fr 1fr;gap:.9rem}
 .check{flex-direction:row!important;align-items:flex-start;gap:.55rem;font-weight:500}
 .check input{width:20px;height:20px;margin-top:.15rem}
+.order-summary{display:flex;flex-wrap:wrap;align-items:center;gap:.5rem;background:var(--primary-l);
+  border:1px solid #cfe0e2;border-radius:var(--r-sm);padding:.8rem 1rem;margin-bottom:1rem}
+.order-summary__label{color:var(--muted);font-size:.85rem}
+.order-summary strong{color:var(--primary-d);font-size:1.02rem}
 
 /* contact */
 .contact-info{display:flex;flex-direction:column;gap:.8rem}
@@ -1611,6 +1606,25 @@ JS = r"""// R7LE — interactions: mobile nav + FAQ accordion
       if (icn) icn.textContent = open ? "+" : "–";
     });
   });
+
+  // Prefill the order summary from ?dest=&pkg= (auto destination, no login)
+  var box = document.getElementById("order-summary");
+  if (box) {
+    var params = new URLSearchParams(location.search);
+    var dest = params.get("dest");
+    var pkg = params.get("pkg");
+    if (dest || pkg) {
+      var pkgEl = document.getElementById("order-pkg");
+      var destEl = document.getElementById("order-dest");
+      if (pkgEl) pkgEl.textContent = pkg || "باقة";
+      if (destEl) { if (dest) destEl.textContent = dest; else destEl.hidden = true; }
+      var di = document.getElementById("order-dest-input");
+      var pi = document.getElementById("order-pkg-input");
+      if (di) di.value = dest || "";
+      if (pi) pi.value = pkg || "";
+      box.hidden = false;
+    }
+  }
 })();
 """
 

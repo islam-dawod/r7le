@@ -3,15 +3,15 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>حساب العميل | متابعة الطلبات — رحلة R7LE</title>
-<meta name="description" content="حساب عميل رحلة R7LE الآمن: متابعة الطلبات والفواتير، رفع المستندات، وسجل رسائل لكل طلب، مع تحقق ثنائي وإدارة جلسات آمنة.">
+<title>ابدأ طلب الباقة | رحلة R7LE</title>
+<meta name="description" content="ابدأ طلب باقة تجهيز مستندات التأشيرة من رحلة R7LE ببيانات أساسية بدون تسجيل دخول، مع إنشاء رقم مرجعي لمتابعة الطلب ورفع المستندات لاحقًا.">
 <meta name="robots" content="index,follow">
 <link rel="canonical" href="https://r7le.com/client/">
 <meta property="og:type" content="website">
 <meta property="og:locale" content="ar_IQ">
 <meta property="og:site_name" content="رحلة R7LE">
-<meta property="og:title" content="حساب العميل | متابعة الطلبات — رحلة R7LE">
-<meta property="og:description" content="حساب عميل رحلة R7LE الآمن: متابعة الطلبات والفواتير، رفع المستندات، وسجل رسائل لكل طلب، مع تحقق ثنائي وإدارة جلسات آمنة.">
+<meta property="og:title" content="ابدأ طلب الباقة | رحلة R7LE">
+<meta property="og:description" content="ابدأ طلب باقة تجهيز مستندات التأشيرة من رحلة R7LE ببيانات أساسية بدون تسجيل دخول، مع إنشاء رقم مرجعي لمتابعة الطلب ورفع المستندات لاحقًا.">
 <meta property="og:url" content="https://r7le.com/client/">
 <meta property="og:image" content="https://r7le.com/assets/img/logo-full.png">
 <link rel="icon" href="../assets/img/favicon-32.png" sizes="32x32" type="image/png">
@@ -61,59 +61,49 @@
 </div><main id="main"><nav class="crumbs" aria-label="مسار التصفح"><div class="wrap"><ol><li><a href="../index.html">الرئيسية</a></li><li aria-current="page">حساب العميل</li></ol></div></nav>
 <section class="page-hero">
   <div class="wrap">
-    <span class="eyebrow">لوحة العميل</span>
-    <h1>حساب العميل</h1>
-    <p class="lead">سجّل الدخول لمتابعة طلباتك ورفع المستندات المطلوبة بأمان. الواجهة هنا تجريبية للعرض — الربط الفعلي يتم ضمن مرحلة المعاملات.</p>
+    <span class="eyebrow">طلب الخدمة</span>
+    <h1>ابدأ طلب الباقة</h1>
+    <p class="lead">املأ بياناتك الأساسية لبدء الطلب — بدون تسجيل دخول ولا مستندات حساسة في هذه الخطوة. تظهر الرسوم منفصلة قبل الدفع.</p>
   </div>
 </section>
 <section class="section">
-  <div class="wrap grid grid--2 grid--top">
-    <div class="formcard">
-      <h2><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 10V8a6 6 0 0 1 12 0v2M5 10h14v10H5z"/></svg> تسجيل الدخول</h2>
-      <form class="form" onsubmit="return false">
-        <label>البريد الإلكتروني
-          <input type="email" autocomplete="email" placeholder="name@email.com" required></label>
-        <label>كلمة المرور
-          <input type="password" autocomplete="current-password" placeholder="••••••••" required></label>
-        <button class="btn btn--primary btn--block" type="submit">دخول آمن</button>
-        <p class="muted sm">محميّ بتحقق ثنائي (MFA) وإدارة جلسات آمنة.</p>
-      </form>
-    </div>
+  <div class="wrap narrow">
     <div class="formcard" id="order">
-      <h2><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 3h7l5 5v13a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1z"/><path d="M14 3v5h5"/></svg> ابدأ طلب خدمة</h2>
+      <h2><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 3h7l5 5v13a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1z"/><path d="M14 3v5h5"/></svg> بيانات الطلب</h2>
+      <div class="order-summary" id="order-summary" hidden>
+        <span class="order-summary__label">الباقة المختارة</span>
+        <strong id="order-pkg"></strong>
+        <span class="chip" id="order-dest"></span>
+      </div>
       <form class="form" onsubmit="return false">
-        <label>الوجهة
-          <select required>
-            <option value="">اختر الوجهة…</option>
-            <option>أمريكا — B1/B2</option>
-            <option>كندا — زيارة</option>
-            <option>أستراليا — Subclass 600</option>
-          </select></label>
+        <input type="hidden" id="order-dest-input" name="dest">
+        <input type="hidden" id="order-pkg-input" name="pkg">
         <label>الاسم الكامل <input type="text" placeholder="الاسم الثلاثي" required></label>
         <div class="form__row">
           <label>رقم الهاتف
             <input type="tel" inputmode="tel" dir="ltr" placeholder="+964 7XX XXX XXXX" required></label>
-          <label>المحافظة (إن كنت مقيمًا بالعراق)
+          <label>المحافظة (اختياري)
             <input type="text" placeholder="مثال: بغداد"></label>
         </div>
+        <label>البريد الإلكتروني (اختياري)
+          <input type="email" dir="ltr" autocomplete="email" placeholder="name@email.com"></label>
         <label class="check"><input type="checkbox" required>
           <span>أوافق على <a href="../terms/index.html">الشروط</a> و<a href="../privacypolicy/index.html">الخصوصية</a>.</span></label>
-        <label class="check"><input type="checkbox">
-          <span>أوافق على تواصل تسويقي اختياري.</span></label>
         <button class="btn btn--primary btn--block" type="submit">متابعة لمراجعة السعر</button>
-        <p class="muted sm">لا نطلب مستندات حساسة في هذه الخطوة. تظهر الرسوم منفصلة قبل الدفع.</p>
+        <p class="muted sm">لا نطلب تسجيل دخول في هذه الخطوة. بعد تأكيد الطلب يُنشأ لك رقم
+           مرجعي لمتابعته ورفع المستندات لاحقًا.</p>
       </form>
     </div>
   </div>
 </section>
 <section class="section section--alt">
   <div class="wrap">
-    <div class="section__head"><h2>ماذا يوفّر حساب العميل؟</h2></div>
+    <div class="section__head"><span class="kicker">بعد الطلب</span><h2>ماذا يحدث بعد إرسال طلبك؟</h2></div>
     <div class="grid grid--3">
-      <div class="feature"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 3h7l5 5v13a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1z"/><path d="M14 3v5h5"/></svg><h3>طلباتك وفواتيرك</h3>
-        <p>عرض الطلبات والفواتير والإيصالات، وتنزيل النسخ النهائية وفق سياسة الاحتفاظ.</p></div>
+      <div class="feature"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 3h7l5 5v13a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1z"/><path d="M14 3v5h5"/></svg><h3>رقم مرجعي وفاتورة</h3>
+        <p>يُنشأ رقم مرجعي للطلب، وتُعرض الطلبات والفواتير والإيصالات لمتابعتها.</p></div>
       <div class="feature"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l8 3v6c0 5-3.5 8-8 9-4.5-1-8-4-8-9V6l8-3z"/></svg><h3>رفع آمن للمستندات</h3>
-        <p>قائمة المستندات المطلوبة مع رفع آمن، وتوضيح ما ينقص من العميل.</p></div>
+        <p>قائمة المستندات المطلوبة مع رفع آمن لاحقًا، وتوضيح ما ينقص منك.</p></div>
       <div class="feature"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 5h16v11H9l-5 4V5z"/></svg><h3>سجل رسائل لكل طلب</h3>
         <p>متابعة واضحة دون إظهار بيانات داخلية، مع المسؤول عن المتابعة.</p></div>
     </div>

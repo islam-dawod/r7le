@@ -293,6 +293,10 @@ ul{margin:0;padding:0;list-style:none}
 .form__row{display:grid;grid-template-columns:1fr 1fr;gap:.9rem}
 .check{flex-direction:row!important;align-items:flex-start;gap:.55rem;font-weight:500}
 .check input{width:20px;height:20px;margin-top:.15rem}
+.order-summary{display:flex;flex-wrap:wrap;align-items:center;gap:.5rem;background:var(--primary-l);
+  border:1px solid #cfe0e2;border-radius:var(--r-sm);padding:.8rem 1rem;margin-bottom:1rem}
+.order-summary__label{color:var(--muted);font-size:.85rem}
+.order-summary strong{color:var(--primary-d);font-size:1.02rem}
 
 /* contact */
 .contact-info{display:flex;flex-direction:column;gap:.8rem}
